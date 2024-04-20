@@ -1,0 +1,22 @@
+openapi: 3.0.3
+info:
+  title: Спецификация распределенного калькулятора
+  description: Спецификация для написания сервиса для итогового проекта Yandex Lyceum по годовому курсу "Go для начинающих".
+  contact:
+    name: Bogdanov Danila
+    url: https://t.me/Dbugdanov
+  version: 0.0.1
+servers:
+  - url: 'https://calculator.com/api/'
+    description: production server
+  - url: 'http://localhost:42533/api/'
+    description: Dev server
+
+tags:
+  - name: Orchestrator
+    description: All orchestrator service methods
+  - name: Calculator
+    description: All calculator service methods
+
+paths:
+  
