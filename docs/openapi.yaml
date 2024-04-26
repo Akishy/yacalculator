@@ -7,9 +7,9 @@ info:
     url: https://t.me/Dbugdanov
   version: 0.0.1
 servers:
-  - url: 'https://calculator.com/api/'
+  - url: 'https://calculator.com/'
     description: production server
-  - url: 'http://localhost:42533/api/'
+  - url: 'http://127.0.0.1:8080/'
     description: Dev server
 
 tags:
@@ -19,4 +19,64 @@ tags:
     description: All calculator service methods
 
 paths:
+  /register:
+    post:
+      description: Register new user
+      operationId: register
+      tags:
+        - Orchestrator
+
+      requestBody:
+        $ref: "#/components/requestBodies/RegisterBody"
+      responses:
+        201:
+          description: User successfully created
+          content:
+            application/json:
+              schema:
+                type: array
+                example: []
+        400:
+          description: User exists or values not passed validation
+          content:
+            application/json:
+              examples:
+                example1:
+                  value: ["user 123 already exists"]
+                example2:
+                  value: ["validate error"]
+        500:
+          description: Error on server
+          content:
+            application/json:
+              schema:
+                nullable: true
+
+
+
+
+
+
+
+
+components:
+  requestBodies:
+    RegisterBody:
+      description: x-form-encoded object used for registration
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            $ref: "#/components/schemas/User"
+  schemas:
+    User:
+      type: object
+      properties:
+        username:
+          description: username can not contain forbidden symbols _~:/?#[]@!$&'()*+,;= and can not be empty string
+          type: string
+        password:
+          description: password can not be empty
+          type: string
+
   
