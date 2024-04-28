@@ -1,6 +1,7 @@
 package expression
 
 import (
+	"Orchestrator/internal/tokenizer"
 	"context"
 	"database/sql"
 	"errors"
@@ -8,7 +9,6 @@ import (
 	"go/scanner"
 	"go/token"
 	"log"
-	"orchestrator/internal/tokenizer"
 )
 
 func NewExpression(ctx context.Context, uid int, expression string) (*Expression, error) {

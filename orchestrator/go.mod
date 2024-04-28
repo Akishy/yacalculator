@@ -1,4 +1,4 @@
-module orchestrator
+module Orchestrator
 
 go 1.22
 

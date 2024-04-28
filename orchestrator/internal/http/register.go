@@ -1,12 +1,12 @@
 package http
 
 import (
+	"Orchestrator/internal/auth"
 	"context"
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"log"
 	"net/http"
-	"orchestrator/internal/auth"
 )
 
 func (osrv *OrchServer) register(ctx context.Context) func(c echo.Context) error {

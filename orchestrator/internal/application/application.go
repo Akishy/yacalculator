@@ -1,11 +1,11 @@
 package application
 
 import (
+	"Orchestrator/db/sqlite"
+	"Orchestrator/internal/http"
+	"Orchestrator/internal/orchestrator"
 	"context"
 	"database/sql"
-	"orchestrator/db/sqlite"
-	"orchestrator/internal/http"
-	"orchestrator/internal/orchestrator"
 )
 
 func Init() {

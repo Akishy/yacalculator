@@ -7,9 +7,12 @@ COPY go.sum go.sum
 
 RUN go mod download
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -o /go/bin/app ticket/cmd/main.go
-EXPOSE 8010
+RUN CGO_ENABLED=1 GOOS=linux go build -o /go/bin/app cmd/main.go
 
-FROM gcr.io/distroless/static-debian12
-COPY --from=build /go/bin/app /
-CMD ["/app"]
+FROM gcr.io/distroless/base-nossl-debian12
+COPY --from=build /go/bin/app .
+
+EXPOSE 8081
+ENV PORT=8081
+
+ENTRYPOINT ["/app"]

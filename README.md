@@ -91,4 +91,18 @@ curl -X POST 'http://localhost:8080/login' -H 'Content-Type: application/x-www-f
 
 ### Схемы
 
-![Untitled-2024-02-23-2110.png|Различные схемы](docs%2FUntitled-2024-02-23-2110.png)
+**Схема работы**
+
+![work_scheme|Схема работы](docs\work_scheme.png "Схема работы")
+
+**Схема работы расширенная**
+
+![work_scheme2|Схема работы расширенная](docs\work_scheme2.png "Схема работы расширенная")
+
+**Обобщенная доменная модель**
+
+![domain_model|Обобщенная доменная модель](docs\domain_model.png "Обобщенная доменная модель")
+
+**Функциональные требования**
+
+![functionality|Функциональные требования](docs\functionality.png "Функциональные требования")

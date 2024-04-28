@@ -1,9 +1,9 @@
 package application
 
 import (
+	"Orchestrator/internal/http"
+	"Orchestrator/internal/orchestrator"
 	"database/sql"
-	"orchestrator/internal/http"
-	"orchestrator/internal/orchestrator"
 )
 
 type Application struct {

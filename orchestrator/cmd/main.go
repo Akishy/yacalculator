@@ -1,6 +1,6 @@
 package main
 
-import "orchestrator/internal/application"
+import "Orchestrator/internal/application"
 
 func main() {
 	application.Init()
