@@ -105,4 +105,4 @@ curl -X POST 'http://localhost:8080/login' -H 'Content-Type: application/x-www-f
 
 **Функциональные требования**
 
-![functionality|Функциональные требования](docs\functionality.png "Функциональные требования")
+![functionality|Функциональные требования](docs/functionality.png "Функциональные требования")
