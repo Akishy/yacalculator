@@ -28,7 +28,7 @@ func (osrv *OrchServer) register(ctx context.Context) func(c echo.Context) error
 		exists, err := auth.CheckIfUserExists(ctx, osrv.DB, username)
 		if err != nil {
 			log.Println(err)
-			return echo.ErrInternalServerError
+			return c.JSON(http.StatusBadRequest, echo.Map{"status": "user already exists"})
 		}
 		if exists {
 			return c.JSON(http.StatusBadRequest, echo.Map{"error": fmt.Sprintf("user %s already exists", username)})
@@ -42,6 +42,6 @@ func (osrv *OrchServer) register(ctx context.Context) func(c echo.Context) error
 			return echo.ErrInternalServerError
 		}
 		log.Printf("[INFO] register: user %v successefuly created", userId)
-		return c.JSON(http.StatusCreated, []string{"OK"})
+		return c.JSON(http.StatusCreated, echo.Map{"status": "OK"})
 	}
 }

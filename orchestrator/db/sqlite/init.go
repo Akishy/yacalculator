@@ -25,7 +25,8 @@ func createExpressions(ctx context.Context, db *sql.DB) error {
         expression_id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
         raw_expression TEXT,
-        ast_tree TEXT,
+        status INTEGER CHECK(status >= 0),
+        result TEXT,
         FOREIGN KEY (user_id) REFERENCES users (id)
     );`
 	if _, err := db.ExecContext(ctx, expressionsTable); err != nil {
@@ -42,6 +43,7 @@ func createSubExpressions(ctx context.Context, db *sql.DB) error {
     	operator TEXT,
     	left_operand TEXT,
     	right_operand TEXT,
+    	result TEXT,
     	FOREIGN KEY (subexpression_id) REFERENCES expressions (expression_id)
 	);`
 	if _, err := db.ExecContext(ctx, subExpressionsTable); err != nil {

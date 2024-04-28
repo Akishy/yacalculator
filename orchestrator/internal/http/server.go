@@ -49,13 +49,16 @@ func (osrv *OrchServer) RunHttpServer(ctx context.Context) {
 			return new(jwtCustomClaims)
 		},
 		SigningKey: []byte(getJWTsecretFromEnv()),
+		ContextKey: "userInfo",
 	}
 
 	api.Use(echojwt.WithConfig(config))
 
 	api.GET("/expressions", getAllExpressions)
-	api.POST("/expressions", createExpression)
+	api.POST("/expressions", osrv.createExpression(ctx))
 	api.DELETE("/expressions/:id", deleteExpressionById)
+
+	//TODO: "/profile" route to see settings of user and manage time_to_calc
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%v", os.Getenv("PORT"))))
 }

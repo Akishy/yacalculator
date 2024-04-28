@@ -12,6 +12,7 @@ type subExpressionStatus int
 const (
 	NEEDTOCALC subExpressionStatus = iota
 	DONE
+	STOPPED // todo: todo: добавить возможность останавливать вычисление подвыражения без блокировки агента
 	FAILED
 )
 
