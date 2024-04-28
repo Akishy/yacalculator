@@ -21,5 +21,5 @@ func NewSubExpression(expressionID int, timeToExec time.Duration, left ast.Basic
 }
 
 func (sexp *SubExpression) SendToAgent() constant.Value {
-
+	return nil
 }
