@@ -13,7 +13,7 @@ func Init() {
 
 	ctx := context.TODO()
 
-	db, err := sql.Open("sqlite3", "store.db")
+	db, err := sql.Open("sqlite3", "./store.db")
 	if err != nil {
 		panic(err)
 	}

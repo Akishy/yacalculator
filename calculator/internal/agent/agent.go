@@ -1,10 +1,13 @@
 package agent
 
 import (
+	"context"
+	"database/sql"
 	"fmt"
 	"go/ast"
 	"go/constant"
 	"go/token"
+	"log"
 	"time"
 )
 
@@ -33,4 +36,21 @@ func (a *Agent) sendHeartBeat() {
 			a.StatusChan <- a.Status // Отправляем текущее состояние агента
 		}
 	}
+}
+
+func (a *Agent) Insert(ctx context.Context, db *sql.DB) (int64, error) {
+	q := `INSERT INTO agents (owner_id, status) VALUES ($1, $2);`
+
+	result, err := db.ExecContext(ctx, q, a.OwnerID, a.Status)
+	if err != nil {
+		log.Printf("[ERROR] AgentInsert: error inserting agent: %v", err)
+		return -1, err
+	}
+	id, err := result.LastInsertId()
+	if err != nil {
+		log.Printf("[ERROR] AgentInsert: error getting last insert id: %v", err)
+	}
+
+	return id, nil
+
 }

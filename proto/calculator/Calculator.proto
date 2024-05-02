@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package agent;
+
+option go_package = "calculator.v1;calcv1";
+
+service Agent {
+  rpc Create (CreateRequest) returns (CreateResponse);
+}
+
+message CreateRequest {
+  int64 owner_id = 1;
+
+}
+
+message CreateResponse {
+  int64 agent_id = 1;
+
+}
+
+
+service Task {
+  rpc Publish (PublishRequest) returns (PublishResponse);
+}
+
+message PublishRequest {
+  int64 user_id = 1;
+  int64 subexpression_id = 2;
+  SubExpression subexpression = 3;
+  int64 time_to_calc = 4; // as specification says time.duration is int64 nanosecond count
+}
+
+
+message SubExpression {
+  string left_operand = 1;
+  operand_type left_operand_type = 2;
+  operator_type op = 3; // op is operator (+ - / *)
+  string right_operand = 4;
+  operand_type right_operand_type = 5;
+}
+
+message PublishResponse {
+  int64 user_id = 1;
+  int64 subExpression_id = 2;
+  string result_of_calculation = 3;
+  operand_type result_of_calculation_type = 4;
+}
+
+enum operand_type {
+  int = 0; // 2, 3, 4, 5 etc... (int64)
+  float = 1; // 2.3, 3.2, 4.123 etc... (float64)
+}
+
+enum operator_type {
+  add = 0; // +
+  sub = 1; // -
+  mul = 2; // *
+  quo = 3; // /
+}
