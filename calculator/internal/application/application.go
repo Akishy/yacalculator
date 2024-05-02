@@ -5,7 +5,12 @@ import (
 	"Calculator/internal/calculator"
 	"context"
 	"database/sql"
+	"fmt"
 	_ "github.com/mattn/go-sqlite3"
+	"google.golang.org/grpc"
+	"log"
+	"net"
+	"os"
 )
 
 func Init() {
@@ -30,7 +35,19 @@ func Init() {
 	app.DB = db
 
 	calcServer := calculator.New(app.DB)
-	calcServer.Start(ctx)
+	go calcServer.Start(ctx)
 	app.Calculator = calcServer
+
+	grpcServer := grpc.NewServer()
+	//agent.Register(grpcServer)
+	app.gRPCServer = grpcServer
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", os.Getenv("PORT")))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := app.gRPCServer.Serve(lis); err != nil {
+		log.Fatal(err)
+	}
 
 }
