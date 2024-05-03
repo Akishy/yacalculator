@@ -16,10 +16,11 @@ func NewAgent(ownerID int) *Agent {
 		OwnerID:    ownerID,
 		Status:     0,
 		StatusChan: make(chan Status),
+		TaskChan:   make(chan Task),
 	}
 }
 
-// calculateTask вычисляет выражение и отдаёт
+// calculateTask вычисляет выражение и отдаёт результат вычисления
 func (a *Agent) calculateTask(left ast.BasicLit, op token.Token, right ast.BasicLit) constant.Value {
 	fmt.Println("calculating...")
 	return constant.BinaryOp(constant.MakeFromLiteral(left.Value, left.Kind, 0), op, constant.MakeFromLiteral(right.Value, right.Kind, 0))
@@ -38,6 +39,7 @@ func (a *Agent) sendHeartBeat() {
 	}
 }
 
+// Insert возвращает id агента
 func (a *Agent) Insert(ctx context.Context, db *sql.DB) (int64, error) {
 	q := `INSERT INTO agents (owner_id, status) VALUES ($1, $2);`
 
@@ -52,5 +54,9 @@ func (a *Agent) Insert(ctx context.Context, db *sql.DB) (int64, error) {
 	}
 
 	return id, nil
+}
 
+func (a *Agent) Run(ctx context.Context) error {
+	go a.sendHeartBeat()
+	return nil
 }

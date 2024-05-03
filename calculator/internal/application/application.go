@@ -2,6 +2,7 @@ package application
 
 import (
 	"Calculator/db/sqlite"
+	"Calculator/grpc/agent"
 	"Calculator/internal/calculator"
 	"context"
 	"database/sql"
@@ -18,7 +19,7 @@ func Init() {
 
 	ctx := context.TODO()
 
-	db, err := sql.Open("sqlite3", "./store.db")
+	db, err := sql.Open("sqlite3", "./CalculatorStore.db")
 	if err != nil {
 		panic(err)
 	}
@@ -39,7 +40,7 @@ func Init() {
 	app.Calculator = calcServer
 
 	grpcServer := grpc.NewServer()
-	//agent.Register(grpcServer)
+	agent.Register(grpcServer)
 	app.gRPCServer = grpcServer
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", os.Getenv("PORT")))
 	if err != nil {

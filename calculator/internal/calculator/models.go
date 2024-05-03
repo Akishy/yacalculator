@@ -1,7 +1,11 @@
 package calculator
 
-import "database/sql"
+import (
+	"Calculator/internal/agent"
+	"database/sql"
+)
 
 type Calculator struct {
-	DB *sql.DB
+	DB     *sql.DB
+	Agents map[int]*agent.Agent
 }
