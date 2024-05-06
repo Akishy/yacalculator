@@ -9,7 +9,7 @@ import (
 
 func tryConnectToDB() {
 	ctx := context.TODO()
-	db, err := sql.Open("sqlite3", "./CalculatorStore.db")
+	db, err := sql.Open("sqlite3", "./store.db")
 	if err != nil {
 		log.Println(err)
 	}

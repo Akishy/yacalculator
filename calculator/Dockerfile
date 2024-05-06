@@ -17,8 +17,7 @@ LABEL authors="Danila Bogdanov https://t.me/DBugdanov"
 COPY --from=build /go/bin/app .
 COPY --from=build /database .
 
-EXPOSE 8080
-ENV PORT=8080
-ENV JWT_SECRET="addHereYourJWTSecret"
+EXPOSE 8081
+ENV PORT=8081
 
 ENTRYPOINT ["/app"]

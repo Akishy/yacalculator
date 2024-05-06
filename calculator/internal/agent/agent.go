@@ -1,10 +1,9 @@
 package agent
 
 import (
+	"Calculator/internal/task"
 	"context"
 	"database/sql"
-	"fmt"
-	"go/ast"
 	"go/constant"
 	"go/token"
 	"log"
@@ -16,14 +15,17 @@ func NewAgent(ownerID int) *Agent {
 		OwnerID:    ownerID,
 		Status:     0,
 		StatusChan: make(chan Status),
-		TaskChan:   make(chan Task),
+		TaskChan:   make(chan task.Task),
+		ResultChan: make(chan *Result),
 	}
 }
 
 // calculateTask вычисляет выражение и отдаёт результат вычисления
-func (a *Agent) calculateTask(left ast.BasicLit, op token.Token, right ast.BasicLit) constant.Value {
-	fmt.Println("calculating...")
-	return constant.BinaryOp(constant.MakeFromLiteral(left.Value, left.Kind, 0), op, constant.MakeFromLiteral(right.Value, right.Kind, 0))
+func (a *Agent) calculateTask(left constant.Value, op token.Token, right constant.Value) constant.Value {
+	log.Println("calculating...")
+	out := constant.BinaryOp(left, op, right)
+	log.Println(out.Kind())
+	return out
 }
 
 func (a *Agent) sendHeartBeat() {
@@ -33,7 +35,7 @@ func (a *Agent) sendHeartBeat() {
 	for {
 		select {
 		case <-timer.C:
-			fmt.Println(a.Status)
+			log.Println(a.Status)
 			a.StatusChan <- a.Status // Отправляем текущее состояние агента
 		}
 	}
@@ -51,12 +53,35 @@ func (a *Agent) Insert(ctx context.Context, db *sql.DB) (int64, error) {
 	id, err := result.LastInsertId()
 	if err != nil {
 		log.Printf("[ERROR] AgentInsert: error getting last insert id: %v", err)
+		return -1, err
 	}
+
+	a.Id = int(id)
 
 	return id, nil
 }
 
-func (a *Agent) Run(ctx context.Context) error {
-	go a.sendHeartBeat()
-	return nil
+func (a *Agent) Run() {
+	go a.sendHeartBeat() // отправляем статус агента в отдельной горутине
+	for {
+		select {
+		case _task := <-a.TaskChan: // Когда прилетает таска
+			log.Println("agent ", a.Id, "task catch")
+			a.Status = WORKING // Меняем статус агента на "работаю"
+			left := _task.Left
+			op := _task.Operand
+			right := _task.Right
+			time.Sleep(_task.TimeToSolve * time.Nanosecond) // И считаем выражение с заданным таймаутом.
+			out := a.calculateTask(left, op, right)
+			result := &Result{
+				Value:     out,
+				ValueType: 0,
+			}
+			log.Println("out: /// ", out)
+			a.ResultChan <- result // Отдаём результат в соответствующий канал
+			log.Println("agent send out")
+			_task.TaskStatus = task.DONE
+			a.Status = ALIVE
+		}
+	}
 }

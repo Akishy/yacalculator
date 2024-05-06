@@ -1,0 +1,23 @@
+services:
+  orchestrator:
+    build:
+      context: ./orchestrator/
+      dockerfile: Dockerfile
+    volumes:
+      - orchestrator_database:/database
+    ports:
+      - 8080:8080
+    depends_on:
+      - calculator
+  calculator:
+    build:
+      context: ./calculator
+      dockerfile: Dockerfile
+    volumes:
+      - calculator_database:/database
+    ports:
+      - 8081:8081
+
+volumes:
+  calculator_database:
+  orchestrator_database:
